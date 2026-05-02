@@ -1,0 +1,23 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# HuggingFace model cache
+.cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Submission artefacts (predictions.csv and results.json) MUST be committed
+# per the SMILES-2026 README requirements (Q2), so they are intentionally
+# NOT listed here even though the upstream template excluded them.
