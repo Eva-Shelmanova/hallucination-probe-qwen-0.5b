@@ -13,13 +13,13 @@ that classifies whether a model response is *truthful* (`label = 0`) or
 | 3. Probe — val split (5-fold avg)     | 75.68 %  | 84.84 %| 77.48 % |
 | 4. **Probe — test split (5-fold avg)**| **74.31 %** | **83.85 %** | **75.02 %** |
 
-(numbers taken from `results.json` — `solution.py`, single seed = 42.)
+(last numbers taken from `results.json` — `solution.py`, single seed = 42.)
 
 ---
 
 ## 1. Reproducibility
 
-### TL;DR — three commands
+### TL;DR
 
 ```bash
 git clone https://github.com/Eva-Shelmanova/hallucination-probe-qwen-0.5b.git
@@ -104,7 +104,7 @@ md5(predictions.csv) = 3e4ef9740e85748a573eb896c2f73df9
 md5(results.json)    = a8c780c257597449ceebbbc964b80fc0
 ```
 
-We re-ran `python solution.py` from scratch on the tested environment to
+Re-ran `python solution.py` from scratch on the tested environment to
 confirm reproducibility:
 
 * `predictions.csv` — **byte-identical**, MD5 matches.
@@ -132,7 +132,7 @@ So if you reproduce on the exact stack above, you should get a bit-identical
 
 ---
 
-## 2. Final solution at a glance
+## 2. Final solution in diagram
 
 ```
                       ┌─────────────────────────────────────────────┐
@@ -162,7 +162,7 @@ So if you reproduce on the exact stack above, you should get a bit-identical
                         predicted label  (0 = truthful, 1 = halluc.)
 ```
 
-### Files I changed
+### Files I have to change
 
 * `aggregation.py` — multi-layer pooled feature extractor with response-biased
   `lastK*` pools; layer-major / pool-minor layout published as `pool_indices()`
@@ -172,12 +172,6 @@ So if you reproduce on the exact stack above, you should get a bit-identical
   a val split is supplied.
 * `splitting.py` — 5-fold StratifiedKFold with a 20 % stratified val carve-out
   per fold (used only for threshold tuning, no leakage).
-
-### Files I did NOT touch
-
-* `model.py` (LLM loader)
-* `evaluate.py` (eval loop, summary table, JSON output)
-* `solution.py` (orchestration)
 
 ---
 
@@ -220,7 +214,7 @@ variance (5-fold × 5-seed std went from ±3.10 % to ±2.52 %).
 
 ## 4. Cross-validation strategy
 
-**Why 5-fold StratifiedKFold and not a single 70/15/15 split?**  At 689
+**Why 5-fold StratifiedKFold is more efficient than a single 70/15/15 split?**  At 689
 samples a single split's standard error is large (~3 pp); averaging across 5
 folds and reporting per-fold metrics in `results.json` gives a much more
 honest estimate of true test performance.
